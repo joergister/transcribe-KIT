@@ -1,6 +1,6 @@
 # transcribe-KIT
 
-A simple CLI tool for transcribing audio and video files using KIT's diarization API. Automatically monitors jobs in the background and sends desktop notifications when complete.
+A simple CLI tool for transcribing audio and video files using KIT's diarization API. Automatically monitors jobs in the background for a maximum of 10 hours, downloads the transcripts and sends desktop notifications when complete.
 
 **API Documentation:**
 - API Endpoints: https://diarization-01-hubii.k8s.iism.kit.edu/docs
