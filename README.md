@@ -38,13 +38,13 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 Install transcribe-KIT globally using uv:
 
 ```bash
-uv tool install git+https://github.com/YOUR_USERNAME/transcribe-KIT.git
+uv tool install git+https://github.com/joergister/transcribe-KIT.git
 ```
 
 Or install from a local clone:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/transcribe-KIT.git
+git clone https://github.com/joergister/transcribe-KIT.git
 cd transcribe-KIT
 uv tool install -e .
 ```
@@ -181,4 +181,4 @@ MIT License - feel free to use this tool for your studies!
 
 ## Support
 
-If you encounter any issues, please [open an issue](https://github.com/YOUR_USERNAME/transcribe-KIT/issues) on GitHub.
+If you encounter any issues, please [open an issue](https://github.com/joergister/transcribe-KIT/issues) on GitHub.
