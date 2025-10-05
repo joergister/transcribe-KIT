@@ -95,6 +95,18 @@ transcribe podcast.mp3 --output ~/Documents/transcript.vtt
 transcribe status
 ```
 
+### Edit VTT transcriptions
+
+For correcting transcription errors or speaker attributions, use the companion **[VTT Subtitle Editor]([https://joergister.github.io/vtt-subtitle-editor/](https://github.com/joergister/vtt-subtitle-editor))** with a life hosted instance at **[VTT Subtitle Editor](https://joergister.github.io/vtt-subtitle-editor/)** - a web-based tool that lets you:
+- Play audio synchronized with subtitles
+- Edit text and speaker labels in real-time
+- Fix timestamp errors
+- Export corrected VTT files that preserve formatting for clean git diffs
+- ALL OFFLINE IN YOUR BROWSER
+
+After editing, convert the corrected VTT to text using `transcribe vtt-to-txt`.
+
+
 ### Convert transcriptions to clean text format
 
 The API returns files with timestamps and speaker labels. Convert them to a clean dialogue format:
@@ -114,15 +126,7 @@ SPEAKER_00: Hello, how are you today?
 SPEAKER_01: I'm doing great, thanks for asking. How about you?
 ```
 
-### Edit VTT transcriptions
 
-For correcting transcription errors or speaker attributions, use the companion **[VTT Subtitle Editor](https://joergister.github.io/vtt-subtitle-editor/)** - a web-based tool that lets you:
-- Play audio synchronized with subtitles
-- Edit text and speaker labels in real-time
-- Fix timestamp errors
-- Export corrected VTT files that preserve formatting for clean git diffs
-
-After editing, convert the corrected VTT to text using `transcribe vtt-to-txt`.
 
 ## Available Options
 
