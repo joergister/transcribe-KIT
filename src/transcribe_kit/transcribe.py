@@ -19,7 +19,12 @@ except ImportError:
 
 from .config import get_log_dir
 from .check_status import check_all_transcriptions
-from .convert import convert_csv_to_txt, convert_vtt_to_txt
+from .convert import (
+    convert_csv_to_txt, 
+    convert_vtt_to_txt,
+    txt_to_markdown,
+    markdown_to_pdf
+)
 
 console = Console()
 
@@ -97,13 +102,16 @@ def upload_file(file_path: Path, language: str, speakers: int) -> str:
                 # Provide helpful message for file size errors
                 if e.response.status_code == 413:
                     file_size_mb = file_path.stat().st_size / (1024 * 1024)
+                    compressed_path = file_path.parent / f"{file_path.stem}_compressed{file_path.suffix}"
+                    split_path = file_path.parent / f"{file_path.stem}_part_%03d{file_path.suffix}"
+
                     console.print(f"\n[yellow]File too large: {file_size_mb:.1f}MB[/yellow]")
                     console.print(f"[yellow]The API has rejected this file because it exceeds the maximum upload size.[/yellow]\n")
                     console.print(f"[blue]Solutions:[/blue]")
                     console.print(f"[blue]1. Compress the file to a lower bitrate:[/blue]")
-                    console.print(f'[dim]   ffmpeg -i "{file_path}" -b:a 96k "{file_path.stem}_compressed{file_path.suffix}"[/dim]')
+                    console.print(f'[dim]   ffmpeg -i "{file_path}" -b:a 96k "{compressed_path}"[/dim]')
                     console.print(f"[blue]2. Split into smaller segments:[/blue]")
-                    console.print(f'[dim]   ffmpeg -i "{file_path}" -f segment -segment_time 1800 -c copy "{file_path.stem}_part_%03d{file_path.suffix}"[/dim]')
+                    console.print(f'[dim]   ffmpeg -i "{file_path}" -f segment -segment_time 1800 -c copy "{split_path}"[/dim]')
                 else:
                     console.print(f"[red]Response text: {e.response.text}[/red]")
             sys.exit(1)
@@ -176,15 +184,37 @@ Commands:
                                      Convert CSV transcription to clean dialogue format
   transcribe vtt-to-txt <input.vtt> <output.txt>
                                      Convert VTT transcription to clean dialogue format
+  transcribe txt-to-md <input.txt> <output.md> [INTERVIEWER]
+                                     Convert text dialogue to markdown with highlighting
+  transcribe md-to-pdf <input.md> <output.pdf>
+                                     Convert markdown to PDF (requires: markdown, weasyprint)
   transcribe <file> [options]        Transcribe an audio/video file
 
+Workflow for highlighting:
+  1. transcribe vtt-to-txt interview.vtt interview.txt
+  2. transcribe txt-to-md interview.txt interview.md
+  3. Edit interview.md to adjust ==HIGHLIGHT== markers
+  4. transcribe md-to-pdf interview.md interview.pdf
+
 Examples:
+  # Transcribe audio files
   transcribe audio.mp3 --language en --speakers 2
   transcribe interview.wav --language de --speakers 3 --format csv
   transcribe meeting.mp4 --language fr
+  
+  # Check job status
   transcribe status
+  
+  # Convert to text format
   transcribe csv-to-txt transcription_abc123.csv dialogue.txt
   transcribe vtt-to-txt transcription_abc123.vtt dialogue.txt
+  
+  # Convert to markdown with highlighting (default highlights INTERVIEWER)
+  transcribe txt-to-md dialogue.txt interview.md
+  transcribe txt-to-md dialogue.txt interview.md SPEAKER_00
+  
+  # Edit the markdown file manually to adjust highlighting, then convert to PDF
+  transcribe md-to-pdf interview.md interview.pdf
 
 Supported languages: {', '.join(SUPPORTED_LANGUAGES)}
 
@@ -283,6 +313,51 @@ API Documentation: https://diarization-01-hubii.k8s.iism.kit.edu/docs
 
         convert_vtt_to_txt(str(input_vtt), str(output_txt))
         console.print(f"[green]✓ Converted {input_vtt} -> {output_txt}[/green]")
+        return
+
+    # Check if user wants to convert text to markdown
+    if args.file.lower() == "txt-to-md":
+        if len(args.extra_args) < 2 or len(args.extra_args) > 3:
+            console.print("[red]Error: txt-to-md requires <input.txt> <output.md> [speaker_to_highlight][/red]")
+            console.print("[yellow]Usage: transcribe txt-to-md <input.txt> <output.md> [INTERVIEWER][/yellow]")
+            sys.exit(1)
+
+        input_file = Path(args.extra_args[0])
+        output_md = Path(args.extra_args[1])
+        highlight_speaker = args.extra_args[2] if len(args.extra_args) == 3 else "INTERVIEWER"
+
+        if not input_file.exists():
+            console.print(f"[red]Error: Input file '{input_file}' not found[/red]")
+            sys.exit(1)
+
+        txt_to_markdown(str(input_file), str(output_md), highlight_speaker)
+        console.print(f"[green]✓ Converted {input_file} -> {output_md}[/green]")
+        console.print(f"[dim]Speaker '{highlight_speaker}' marked for highlighting with ==HIGHLIGHT== markers[/dim]")
+        console.print(f"[yellow]→ Edit '{output_md}' to adjust highlighting, then convert to PDF with:[/yellow]")
+        console.print(f"[yellow]  transcribe md-to-pdf {output_md} {output_md.with_suffix('.pdf')}[/yellow]")
+        return
+
+    # Check if user wants to convert markdown to PDF
+    if args.file.lower() == "md-to-pdf":
+        if len(args.extra_args) != 2:
+            console.print("[red]Error: md-to-pdf requires <input.md> <output.pdf>[/red]")
+            console.print("[yellow]Usage: transcribe md-to-pdf <input.md> <output.pdf>[/yellow]")
+            sys.exit(1)
+
+        input_md = Path(args.extra_args[0])
+        output_pdf = Path(args.extra_args[1])
+
+        if not input_md.exists():
+            console.print(f"[red]Error: Input file '{input_md}' not found[/red]")
+            sys.exit(1)
+
+        try:
+            console.print(f"[blue]Converting {input_md} to PDF...[/blue]")
+            markdown_to_pdf(str(input_md), str(output_pdf))
+            console.print(f"[green]✓ Converted {input_md} -> {output_pdf}[/green]")
+        except ImportError as e:
+            console.print(f"[red]Error: {e}[/red]")
+            sys.exit(1)
         return
 
     # Validate input file

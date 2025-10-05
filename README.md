@@ -15,6 +15,7 @@ A simple CLI tool for transcribing audio and video files using KIT's diarization
 - Desktop notifications (macOS)
 - Supports multiple output formats (VTT, CSV)
 - Multi-language support (EN, FR, DE, ES, IT, JA, ZH, NL, UK, PT)
+- Convert transcriptions to clean text, markdown, and highlighted PDFs
 
 ## Prerequisites
 
@@ -163,6 +164,33 @@ SPEAKER_00: Hello, how are you today?
 SPEAKER_01: I'm doing great, thanks for asking. How about you?
 ```
 
+### Create highlighted PDFs for interview analysis
+
+Convert transcriptions to markdown with speaker highlighting, then generate PDFs:
+
+```bash
+# Convert text to markdown (highlights INTERVIEWER by default)
+transcribe txt-to-md dialogue.txt interview.md
+
+# Or highlight a specific speaker
+transcribe txt-to-md dialogue.txt interview.md SPEAKER_00
+
+# Edit the markdown file to manually adjust ==HIGHLIGHT== markers
+
+# Generate PDF with highlighted sections
+transcribe md-to-pdf interview.md interview.pdf
+```
+
+**Workflow for interview analysis:**
+1. Transcribe audio → `transcribe audio.mp3`
+2. Verify transcript and correct if neccessary (**[VTT Subtitle Editor](https://joergister.github.io/vtt-subtitle-editor/)**)
+3. Convert to text → `transcribe vtt-to-txt transcription_*.vtt dialogue.txt`
+4. Convert to markdown → `transcribe txt-to-md dialogue.txt interview.md INTERVIEWER`
+5. Edit `interview.md` to adjust highlighting as needed
+6. Generate PDF → `transcribe md-to-pdf interview.md interview.pdf`
+
+The PDF will have yellow highlighting on the specified speaker's lines, making it easy to review interview responses.
+
 
 
 ## Available Options
@@ -196,7 +224,7 @@ SPEAKER_01: I'm doing great, thanks for asking. How about you?
 ### File Locations
 
 - **Transcription results**: Saved in the same directory as your input file
-  - Example: `audio.mp3` � `transcription_39bc9ffa.vtt` and `transcription_39bc9ffa.csv`
+  - Example: `audio.mp3` ,  `transcription_39bc9ffa.vtt` and `transcription_39bc9ffa.csv`
 - **Log files**: Stored in `~/.transcribe_kit/`
   - Example: `~/.transcribe_kit/transcription_39bc9ffa.log`
 
