@@ -20,6 +20,9 @@ A simple CLI tool for transcribing audio and video files using KIT's diarization
 
 - Python 3.13 or higher
 - [uv](https://docs.astral.sh/uv/) package manager
+- **Operating System**: macOS, Linux, or Windows
+  - Desktop notifications currently only work on macOS
+  - All core functionality (transcription, monitoring, status) works on all platforms
 
 ### Installing uv
 
@@ -123,6 +126,22 @@ transcribe meeting.mp4 --language fr --format csv --speakers 3
 # Check status of all running jobs
 transcribe status
 ```
+
+## Platform-Specific Notes
+
+### macOS
+- Full feature support including desktop notifications
+- Notifications use the native macOS notification system
+
+### Linux
+- All features work except desktop notifications
+- You can still check job status with `transcribe status`
+- Consider using terminal-based notifications or other tools if needed
+
+### Windows
+- All features work except desktop notifications
+- Downloads folder: Uses `%USERPROFILE%\Downloads`
+- Log files stored in `%USERPROFILE%\.transcribe_kit`
 
 ## Troubleshooting
 
