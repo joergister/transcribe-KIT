@@ -38,13 +38,29 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 
 ## Installation
 
+### Option 1: Install globally (recommended)
+
 Install transcribe-KIT globally using uv:
 
 ```bash
 uv tool install git+https://github.com/joergister/transcribe-KIT.git
 ```
 
-Or install from a local clone:
+### Option 2: Run without installing (uvx)
+
+Use `uvx` to run the tool without installing it:
+
+```bash
+# Run directly from GitHub (no installation needed)
+uvx --from git+https://github.com/joergister/transcribe-KIT.git transcribe audio.mp3
+
+# Check status
+uvx --from git+https://github.com/joergister/transcribe-KIT.git transcribe status
+```
+
+**Note:** With `uvx`, you need to prefix every command with `uvx --from git+https://github.com/joergister/transcribe-KIT.git`. For regular use, installing globally (Option 1) is more convenient.
+
+### Option 3: Install from local clone
 
 ```bash
 git clone https://github.com/joergister/transcribe-KIT.git
