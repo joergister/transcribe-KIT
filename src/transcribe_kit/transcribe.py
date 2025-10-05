@@ -10,6 +10,13 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.panel import Panel
 
+# PYTHON_ARGCOMPLETE_OK
+try:
+    import argcomplete
+    ARGCOMPLETE_AVAILABLE = True
+except ImportError:
+    ARGCOMPLETE_AVAILABLE = False
+
 from .config import get_log_dir
 from .check_status import check_all_transcriptions
 from .convert import convert_csv_to_txt, convert_vtt_to_txt
@@ -41,14 +48,21 @@ def validate_file(file_path: str) -> Path:
 def upload_file(file_path: Path, language: str, speakers: int) -> str:
     """Upload file to the diarization API and return job_id."""
     console.print(f"[blue]Uploading {file_path.name} to transcription API...[/blue]")
-    
+
     with open(file_path, 'rb') as f:
         files = {'file': (file_path.name, f, 'application/octet-stream')}
         data = {
             'language': language,
             'speaker': speakers
         }
-        
+
+        # Display API request parameters
+        console.print(f"[dim]API Request Parameters:[/dim]")
+        console.print(f"[dim]  - Endpoint: {API_BASE_URL}/diarization/[/dim]")
+        console.print(f"[dim]  - File: {file_path.name}[/dim]")
+        console.print(f"[dim]  - language: {language}[/dim]")
+        console.print(f"[dim]  - speaker: {speakers}[/dim]")
+
         try:
             response = requests.post(
                 f"{API_BASE_URL}/diarization/",
@@ -79,7 +93,19 @@ def upload_file(file_path: Path, language: str, speakers: int) -> str:
             console.print(f"[red]Upload failed: {e}[/red]")
             if hasattr(e, 'response') and e.response is not None:
                 console.print(f"[red]Response status: {e.response.status_code}[/red]")
-                console.print(f"[red]Response text: {e.response.text}[/red]")
+
+                # Provide helpful message for file size errors
+                if e.response.status_code == 413:
+                    file_size_mb = file_path.stat().st_size / (1024 * 1024)
+                    console.print(f"\n[yellow]File too large: {file_size_mb:.1f}MB[/yellow]")
+                    console.print(f"[yellow]The API has rejected this file because it exceeds the maximum upload size.[/yellow]\n")
+                    console.print(f"[blue]Solutions:[/blue]")
+                    console.print(f"[blue]1. Compress the file to a lower bitrate:[/blue]")
+                    console.print(f'[dim]   ffmpeg -i "{file_path}" -b:a 96k "{file_path.stem}_compressed{file_path.suffix}"[/dim]')
+                    console.print(f"[blue]2. Split into smaller segments:[/blue]")
+                    console.print(f'[dim]   ffmpeg -i "{file_path}" -f segment -segment_time 1800 -c copy "{file_path.stem}_part_%03d{file_path.suffix}"[/dim]')
+                else:
+                    console.print(f"[red]Response text: {e.response.text}[/red]")
             sys.exit(1)
 
 def check_status(job_id: str) -> dict:
@@ -211,6 +237,10 @@ API Documentation: https://diarization-01-hubii.k8s.iism.kit.edu/docs
         "--output-dir",
         help="Directory containing log files (only for 'status' subcommand)"
     )
+
+    # Enable tab completion
+    if ARGCOMPLETE_AVAILABLE:
+        argcomplete.autocomplete(parser)
 
     args = parser.parse_args()
 

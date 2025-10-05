@@ -46,6 +46,43 @@ Install transcribe-KIT globally using uv:
 uv tool install git+https://github.com/joergister/transcribe-KIT.git
 ```
 
+### Enable Tab Completion (Optional)
+
+After installation, enable tab completion for a better CLI experience:
+
+**For zsh (macOS default):**
+```bash
+# Activate completions globally for all argcomplete-enabled tools
+activate-global-python-argcomplete --user
+```
+
+Then add this line to your `~/.zshrc`:
+```bash
+eval "$(register-python-argcomplete transcribe)"
+```
+
+Reload your shell:
+```bash
+source ~/.zshrc
+```
+
+**For bash:**
+```bash
+# Activate completions globally
+activate-global-python-argcomplete --user
+
+# Or add completion for transcribe only to ~/.bashrc:
+eval "$(register-python-argcomplete transcribe)"
+
+# Reload shell
+source ~/.bashrc
+```
+
+Now you can use tab completion:
+- `transcribe <TAB><TAB>` - see available commands (status, csv-to-txt, vtt-to-txt)
+- `transcribe --<TAB><TAB>` - see all available options
+- `transcribe --language <TAB><TAB>` - see supported languages
+
 ### Option 2: Run without installing (uvx)
 
 Use `uvx` to run the tool without installing it:
