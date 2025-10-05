@@ -106,12 +106,15 @@ transcribe status
 
 ## Supported File Formats
 
-- `.mp3`
-- `.aac`
-- `.ogg`
-- `.mp4`
-- `.wav`
-- `.m4a`
+**Officially supported formats:**
+- `.mp3` - MPEG Audio Layer 3
+- `.aac` - Advanced Audio Coding
+- `.ogg` - Ogg Vorbis
+- `.mp4` - MPEG-4 (audio/video)
+- `.wav` - Waveform Audio File Format
+- `.m4a` - MPEG-4 Audio
+
+**Note:** The API uses FFmpeg for processing and may support additional file formats beyond those officially listed. If you have a different audio or video format, you can try uploading it - the API will extract and transcribe the audio.
 
 ## How it Works
 

@@ -18,6 +18,8 @@ console = Console()
 API_BASE_URL = "https://diarization-01-hubii.k8s.iism.kit.edu"
 
 SUPPORTED_LANGUAGES = ["en", "fr", "de", "es", "it", "ja", "zh", "nl", "uk", "pt"]
+# Officially supported formats: mp3, aac, ogg, mp4, wav, m4a
+# API uses FFmpeg and may support additional formats
 SUPPORTED_EXTENSIONS = [".mp3", ".aac", ".ogg", ".mp4", ".wav", ".m4a"]
 
 def validate_file(file_path: str) -> Path:
@@ -152,7 +154,10 @@ Examples:
   transcribe status
 
 Supported languages: {', '.join(SUPPORTED_LANGUAGES)}
-Supported file formats: {', '.join(SUPPORTED_EXTENSIONS)}
+
+Supported file formats:
+  Officially supported: .mp3, .aac, .ogg, .mp4, .wav, .m4a
+  Note: API uses FFmpeg and may support additional formats
 
 API Documentation: https://diarization-01-hubii.k8s.iism.kit.edu/docs
         """
