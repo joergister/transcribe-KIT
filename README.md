@@ -95,12 +95,16 @@ transcribe podcast.mp3 --output ~/Documents/transcript.vtt
 transcribe status
 ```
 
-### Convert CSV to clean text format
+### Convert transcriptions to clean text format
 
-The API returns CSV files with timestamps and speaker labels. Convert them to a clean dialogue format:
+The API returns files with timestamps and speaker labels. Convert them to a clean dialogue format:
 
 ```bash
+# Convert CSV to text
 transcribe csv-to-txt transcription_abc123.csv dialogue.txt
+
+# Convert VTT to text (useful after editing with VTT Editor)
+transcribe vtt-to-txt transcription_abc123.vtt dialogue.txt
 ```
 
 This will combine consecutive speaker segments and output a clean dialogue format like:
@@ -109,6 +113,16 @@ SPEAKER_00: Hello, how are you today?
 
 SPEAKER_01: I'm doing great, thanks for asking. How about you?
 ```
+
+### Edit VTT transcriptions
+
+For correcting transcription errors or speaker attributions, use the companion **[VTT Subtitle Editor](https://joergister.github.io/vtt-subtitle-editor/)** - a web-based tool that lets you:
+- Play audio synchronized with subtitles
+- Edit text and speaker labels in real-time
+- Fix timestamp errors
+- Export corrected VTT files that preserve formatting for clean git diffs
+
+After editing, convert the corrected VTT to text using `transcribe vtt-to-txt`.
 
 ## Available Options
 
@@ -162,6 +176,9 @@ transcribe status
 
 # Convert CSV transcription to clean dialogue format
 transcribe csv-to-txt transcription_39bc9ffa.csv dialogue.txt
+
+# Convert VTT transcription to clean dialogue format
+transcribe vtt-to-txt transcription_39bc9ffa.vtt dialogue.txt
 ```
 
 ## Platform-Specific Notes
