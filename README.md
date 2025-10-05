@@ -14,7 +14,8 @@ A simple CLI tool for transcribing audio and video files using KIT's diarization
 - =� Easy status checking for all jobs
 - = Desktop notifications (macOS)
 - =� Supports multiple output formats (VTT, CSV)
-- < Multi-language support (EN, FR, DE, ES, IT, JA, ZH, NL, UK, PT)
+- <
+ Multi-language support (EN, FR, DE, ES, IT, JA, ZH, NL, UK, PT)
 
 ## Prerequisites
 
@@ -152,15 +153,15 @@ transcribe status
 - Full feature support including desktop notifications
 - Notifications use the native macOS notification system
 
-### Linux
-- All features work except desktop notifications
+### Linux (untested)
+- All features should work except desktop notifications
 - You can still check job status with `transcribe status`
 - Consider using terminal-based notifications or other tools if needed
 
-### Windows
-- All features work except desktop notifications
-- Downloads folder: Uses `%USERPROFILE%\Downloads`
-- Log files stored in `%USERPROFILE%\.transcribe_kit`
+### Windows (untested)
+- All features should work except desktop notifications
+- Downloads folder: should use `%USERPROFILE%\Downloads`
+- Log files should be stored in `%USERPROFILE%\.transcribe_kit`
 
 ## Troubleshooting
 
