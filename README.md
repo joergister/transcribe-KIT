@@ -9,12 +9,12 @@ A simple CLI tool for transcribing audio and video files using KIT's diarization
 
 ## Features
 
-- <� Transcribe audio/video files with speaker diarization
-- = Background monitoring with automatic result downloads
-- =� Easy status checking for all jobs
-- = Desktop notifications (macOS)
-- =� Supports multiple output formats (VTT, CSV)
-- <
+- Transcribe audio/video files with speaker diarization
+- Background monitoring with automatic result downloads
+- Easy status checking for all jobs
+- Desktop notifications (macOS)
+- Supports multiple output formats (VTT, CSV)
+- 
  Multi-language support (EN, FR, DE, ES, IT, JA, ZH, NL, UK, PT)
 
 ## Prerequisites
