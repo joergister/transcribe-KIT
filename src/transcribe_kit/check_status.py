@@ -84,7 +84,8 @@ def check_all_transcriptions(output_dir: str = None):
     
     console.print(table)
     console.print(f"\n[dim]Monitoring log directory: {output_dir}[/dim]")
-    console.print("[dim]Use 'tail -f /path/to/transcription_*.log' to follow a specific job[/dim]")
+    console.print(f"[dim]Use 'tail -f {output_dir}/transcription_<job_id>.log' to follow a specific job[/dim]")
+    console.print(f"[dim]Example: tail -f {output_dir}/transcription_39bc9ffa.log[/dim]")
 
 def main():
     import argparse
