@@ -12,6 +12,7 @@ from rich.panel import Panel
 
 from .config import get_log_dir
 from .check_status import check_all_transcriptions
+from .convert import convert_transcription
 
 console = Console()
 
@@ -145,6 +146,8 @@ def main():
         epilog=f"""
 Commands:
   transcribe status                  Check status of all transcription jobs
+  transcribe csv-to-txt <input.csv> <output.txt>
+                                     Convert CSV transcription to clean dialogue format
   transcribe <file> [options]        Transcribe an audio/video file
 
 Examples:
@@ -152,6 +155,7 @@ Examples:
   transcribe interview.wav --language de --speakers 3 --format csv
   transcribe meeting.mp4 --language fr
   transcribe status
+  transcribe csv-to-txt transcription_abc123.csv dialogue.txt
 
 Supported languages: {', '.join(SUPPORTED_LANGUAGES)}
 
@@ -165,7 +169,13 @@ API Documentation: https://diarization-01-hubii.k8s.iism.kit.edu/docs
 
     parser.add_argument(
         "file",
-        help="Audio/video file to transcribe, or 'status' to check all jobs"
+        help="Audio/video file to transcribe, 'status' to check jobs, or 'csv-to-txt' to convert CSV"
+    )
+
+    parser.add_argument(
+        "extra_args",
+        nargs="*",
+        help="Additional arguments for csv-to-txt: <input.csv> <output.txt>"
     )
 
     parser.add_argument(
@@ -204,6 +214,24 @@ API Documentation: https://diarization-01-hubii.k8s.iism.kit.edu/docs
     # Check if user wants to see status
     if args.file.lower() == "status":
         check_all_transcriptions(args.output_dir)
+        return
+
+    # Check if user wants to convert CSV to text
+    if args.file.lower() == "csv-to-txt":
+        if len(args.extra_args) != 2:
+            console.print("[red]Error: csv-to-txt requires <input.csv> <output.txt>[/red]")
+            console.print("[yellow]Usage: transcribe csv-to-txt <input.csv> <output.txt>[/yellow]")
+            sys.exit(1)
+
+        input_csv = Path(args.extra_args[0])
+        output_txt = Path(args.extra_args[1])
+
+        if not input_csv.exists():
+            console.print(f"[red]Error: Input file '{input_csv}' not found[/red]")
+            sys.exit(1)
+
+        convert_transcription(str(input_csv), str(output_txt))
+        console.print(f"[green]✓ Converted {input_csv} -> {output_txt}[/green]")
         return
 
     # Validate input file

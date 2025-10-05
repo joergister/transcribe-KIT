@@ -95,6 +95,21 @@ transcribe podcast.mp3 --output ~/Documents/transcript.vtt
 transcribe status
 ```
 
+### Convert CSV to clean text format
+
+The API returns CSV files with timestamps and speaker labels. Convert them to a clean dialogue format:
+
+```bash
+transcribe csv-to-txt transcription_abc123.csv dialogue.txt
+```
+
+This will combine consecutive speaker segments and output a clean dialogue format like:
+```
+SPEAKER_00: Hello, how are you today?
+
+SPEAKER_01: I'm doing great, thanks for asking. How about you?
+```
+
 ## Available Options
 
 | Option | Short | Description | Default |
@@ -144,6 +159,9 @@ transcribe meeting.mp4 --language fr --format csv --speakers 3
 
 # Check status of all running jobs
 transcribe status
+
+# Convert CSV transcription to clean dialogue format
+transcribe csv-to-txt transcription_39bc9ffa.csv dialogue.txt
 ```
 
 ## Platform-Specific Notes
