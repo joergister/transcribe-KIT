@@ -14,8 +14,7 @@ A simple CLI tool for transcribing audio and video files using KIT's diarization
 - Easy status checking for all jobs
 - Desktop notifications (macOS)
 - Supports multiple output formats (VTT, CSV)
-- 
- Multi-language support (EN, FR, DE, ES, IT, JA, ZH, NL, UK, PT)
+- Multi-language support (EN, FR, DE, ES, IT, JA, ZH, NL, UK, PT)
 
 ## Prerequisites
 
