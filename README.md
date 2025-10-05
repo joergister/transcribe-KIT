@@ -5,7 +5,7 @@ A simple CLI tool for transcribing audio and video files using KIT's diarization
 **API Documentation:**
 - API Endpoints: https://diarization-01-hubii.k8s.iism.kit.edu/docs
 - OpenAPI Spec: https://diarization-01-hubii.k8s.iism.kit.edu/openapi.json
-- Hosted Whisper instance provided by: [Wirtschaftsinformatik und Informationsmanagement (WIN)](https://www.win.kit.edu/), KIT
+- Hosted Whisper instance provided by: [Institute for Information Systems (WIN)](https://www.win.kit.edu/), KIT
 
 ## Features
 
